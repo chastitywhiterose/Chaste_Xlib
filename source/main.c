@@ -7,14 +7,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+int width=1280,height=720;
+Display *display;
+int s; /*screen*/
+Window window;
+XEvent event;
+
+#include "xlib_checkerboard.h"
  
 int main(void)
 {
- Display *display;
- Window window;
- XEvent event;
  char *msg = "Hello, World!";
- int s;
  
  /*open connection to the server*/
  display = XOpenDisplay(NULL);
@@ -27,14 +31,22 @@ int main(void)
  s = DefaultScreen(display);
  
  /*create window*/
- window = XCreateSimpleWindow(display, RootWindow(display, s), 10, 10, 200, 200, 1,
+ window = XCreateSimpleWindow(display, RootWindow(display, s), 0, 0, width, height, 0,
                                  BlackPixel(display, s), WhitePixel(display, s));
  
  /*select kind of events we are interested in*/
  XSelectInput(display, window, ExposureMask | KeyPressMask);
+
+ /*set up the checkerboard vars*/
+ init_checkerboard();
+ init_checkerboard();
+ main_check.rectsize=16;
+/* main_check.x_end=width/2;
+ main_check.y_end=height/2;*/
  
  /*map (show) the window*/
  XMapWindow(display, window);
+ 
  
  /*event loop*/
  for(;;)
@@ -43,11 +55,12 @@ int main(void)
   /*draw or redraw the window*/
   if (event.type == Expose)
   {
-   XFillRectangle(display, window, DefaultGC(display, s), 20, 20, 10, 10);
+   xlib_chaste_checker();
+   XFillRectangle(display, window, DefaultGC(display, s), 200, 200, 100, 100);
    XDrawString(display, window, DefaultGC(display, s), 50, 50, msg, strlen(msg));
   }
   /*exit on key press*/
-  if (event.type == KeyPress) break;
+  if (event.type == KeyPress){break;}
  }
  
   /*close connection to the server*/
@@ -55,3 +68,10 @@ int main(void)
   
   return 0;
  }
+ 
+ 
+ /*
+ Functions used:
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
+ 
+ */
