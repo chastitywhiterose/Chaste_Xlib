@@ -13,6 +13,7 @@ Display *display;
 int s; /*screen*/
 Window window;
 XEvent event;
+GC gc; /*graphics context*/
 
 #include "xlib_checkerboard.h"
  
@@ -29,6 +30,7 @@ int main(void)
  }
  
  s = DefaultScreen(display);
+ gc=DefaultGC(display, s);
  
  /*create window*/
  window = XCreateSimpleWindow(display, RootWindow(display, s), 0, 0, width, height, 0,
@@ -56,8 +58,8 @@ int main(void)
   if (event.type == Expose)
   {
    xlib_chaste_checker();
-   XFillRectangle(display, window, DefaultGC(display, s), 200, 200, 100, 100);
-   XDrawString(display, window, DefaultGC(display, s), 50, 50, msg, strlen(msg));
+   XFillRectangle(display,window,gc,200,200,100,100);
+   XDrawString(display,window,gc,50,50,msg,strlen(msg));
   }
   /*exit on key press*/
   if (event.type == KeyPress){break;}
