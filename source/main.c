@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 int width=1280,height=720;
 Display *display;
@@ -16,6 +17,9 @@ XEvent event;
 GC gc; /*graphics context*/
 
 #include "xlib_checkerboard.h"
+#include "xlib_polygon.h"
+
+int black,white;
  
 int main(void)
 {
@@ -32,22 +36,39 @@ int main(void)
  s = DefaultScreen(display);
  gc=DefaultGC(display, s);
  
- /*create window*/
- window = XCreateSimpleWindow(display, RootWindow(display, s), 0, 0, width, height, 0,
-                                 BlackPixel(display, s), WhitePixel(display, s));
+ black=BlackPixel(display, s);
+ white=WhitePixel(display, s);
  
- /*select kind of events we are interested in*/
- XSelectInput(display, window, ExposureMask | KeyPressMask);
+ printf("black=%06X\n",black);
+ printf("white=%6X\n",white);
 
- /*set up the checkerboard vars*/
- init_checkerboard();
+/* 
+    XSetForeground(display, gc, BlackPixel(display, s));
+    XSetBackground(display, gc, WhitePixel(display, s));
+ */
+ 
+
+ 
+ /*create window*/
+ window=XCreateSimpleWindow(display,RootWindow(display,s),0, 0,width,height,0,                               BlackPixel(display, s), WhitePixel(display, s));
+ 
+/*
+ Select kind of events we are interested in. Otherwise may not be able to close program.
+*/
+XSelectInput(display, window, ExposureMask | KeyPressMask);
+ 
+/*set drawing color*/
+XSetForeground(display,gc,0x808080);
+ 
+/*map (show) the window*/
+XMapWindow(display, window);
+ 
+ 
+  /*set up the checkerboard vars*/
  init_checkerboard();
  main_check.rectsize=16;
-/* main_check.x_end=width/2;
- main_check.y_end=height/2;*/
- 
- /*map (show) the window*/
- XMapWindow(display, window);
+ main_check.x_end=width/2;
+ main_check.y_end=height/2;
  
  
  /*event loop*/
@@ -57,12 +78,28 @@ int main(void)
   /*draw or redraw the window*/
   if (event.type == Expose)
   {
+   /*draw a rectangle to cover entire screen*/
+   XSetForeground(display,gc,0x000000);
+   XFillRectangle(display,window,gc,0,0,width,height);
+   
+   /*set color of squares that will be drawn for the checkerboard*/
+   XSetForeground(display,gc,0xFF00FF);
    xlib_chaste_checker();
+      XSetForeground(display,gc,0x00FF00);
    XFillRectangle(display,window,gc,200,200,100,100);
+   
+   XSetForeground(display,gc,0x000000);
    XDrawString(display,window,gc,50,50,msg,strlen(msg));
+   
+    main_check.x_begin=200;
+
   }
+  
+
+  
   /*exit on key press*/
   if (event.type == KeyPress){break;}
+  
  }
  
   /*close connection to the server*/
@@ -72,8 +109,11 @@ int main(void)
  }
  
  
- /*
- Functions used:
- https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
+/*
+ Xlib Functions used:
  
- */
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetForeground
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillPolygon
+*/
+
