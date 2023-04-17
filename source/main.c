@@ -70,9 +70,13 @@ XMapWindow(display, window);
  main_check.x_end=width/2;
  main_check.y_end=height/2;
  
+ /*set up the regular polygon vars*/
+ init_polygon();
+  main_polygon.sides=5;
+  main_polygon.step=2;
  
  /*event loop*/
- for(;;)
+ while(1)
  {
   XNextEvent(display, &event);
   /*draw or redraw the window*/
@@ -85,11 +89,16 @@ XMapWindow(display, window);
    /*set color of squares that will be drawn for the checkerboard*/
    XSetForeground(display,gc,0xFF00FF);
    xlib_chaste_checker();
-      XSetForeground(display,gc,0x00FF00);
+   
+   XSetForeground(display,gc,0x00FF00);
    XFillRectangle(display,window,gc,200,200,100,100);
    
    XSetForeground(display,gc,0x000000);
    XDrawString(display,window,gc,50,50,msg,strlen(msg));
+   
+   XSetForeground(display,gc,0x0000FF);
+   xlib_chaste_polygon();
+   main_polygon.radians+=PI/180;
    
     main_check.x_begin=200;
 

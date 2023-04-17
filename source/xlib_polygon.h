@@ -72,7 +72,7 @@ XPoint vertices[3];
 /*
 Draw a filled polygon using modern OpenGL
 */
-void gl_chaste_polygon()
+void xlib_chaste_polygon()
 {
  int i,i1;
  poly_points_func();
