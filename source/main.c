@@ -9,9 +9,10 @@
 #include <string.h>
 #include <math.h>
 
-int width=1280,height=720;
-Display *display;
-int s; /*screen*/
+int width=1280,height=720; /*global width and height of window*/
+int loop=1;
+Display *display; 
+int screen; /*screen*/
 Window window;
 XEvent event;
 GC gc; /*graphics context*/
@@ -21,7 +22,7 @@ GC gc; /*graphics context*/
 
 int black,white;
  
-int main(void)
+int main(int argc, char **argv)
 {
  char *msg = "Hello, World!";
  
@@ -33,11 +34,11 @@ int main(void)
   exit(1);
  }
  
- s = DefaultScreen(display);
- gc=DefaultGC(display, s);
+ screen = DefaultScreen(display);
+ gc=DefaultGC(display,screen);
  
- black=BlackPixel(display, s);
- white=WhitePixel(display, s);
+ black=BlackPixel(display,screen);
+ white=WhitePixel(display,screen);
  
  printf("black=%06X\n",black);
  printf("white=%6X\n",white);
@@ -49,19 +50,19 @@ int main(void)
  
 
  
- /*create window*/
- window=XCreateSimpleWindow(display,RootWindow(display,s),0, 0,width,height,0,                               BlackPixel(display, s), WhitePixel(display, s));
+/*create window of size width*height*/
+window=XCreateSimpleWindow(display,RootWindow(display,screen),0, 0,width,height,0,0,0);
  
 /*
  Select kind of events we are interested in. Otherwise may not be able to close program.
 */
-XSelectInput(display, window, ExposureMask | KeyPressMask);
+XSelectInput(display,window,ExposureMask|KeyPressMask|StructureNotifyMask);
  
 /*set drawing color*/
 XSetForeground(display,gc,0x808080);
  
 /*map (show) the window*/
-XMapWindow(display, window);
+XMapWindow(display,window);
  
  
   /*set up the checkerboard vars*/
@@ -76,12 +77,14 @@ XMapWindow(display, window);
   main_polygon.step=2;
  
  /*event loop*/
- while(1)
+ while(loop)
  {
-  XNextEvent(display, &event);
+  XNextEvent(display,&event);
   /*draw or redraw the window*/
-  if (event.type == Expose)
+  if(event.type==Expose)
   {
+   printf("event.type==Expose\n");
+
    /*draw a rectangle to cover entire screen*/
    XSetForeground(display,gc,0x000000);
    XFillRectangle(display,window,gc,0,0,width,height);
@@ -101,14 +104,26 @@ XMapWindow(display, window);
    main_polygon.radians+=PI/180;
    
     main_check.x_begin=200;
+    
+    printf("%f\n",main_polygon.radians);
 
   }
   
-
+  
+  if(event.type==MapNotify)
+  {
+   printf("event.type==MapNotify\n");
+  }
   
   /*exit on key press*/
-  if (event.type == KeyPress){break;}
+  if(event.type==KeyPress)
+  {
+   printf("event.type==KeyPress\n");
+   break;
+  }
   
+  /*printf("event.type==none\n");*/
+   
  }
  
   /*close connection to the server*/
@@ -121,6 +136,7 @@ XMapWindow(display, window);
 /*
  Xlib Functions used:
  
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XCreateSimpleWindow
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetForeground
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillPolygon
