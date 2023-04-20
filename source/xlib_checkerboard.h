@@ -44,7 +44,7 @@ void xlib_chaste_checker()
   x=main_check.x_begin;
   while(x<main_check.x_end)
   {
-   if(index==1) {XFillRectangle(display,window,gc,x,y,main_check.rectsize,main_check.rectsize);}
+   if(index==1){XFillRectangle(display,window,gc,x,y,main_check.rectsize,main_check.rectsize);}
    index^=1;
    x+=main_check.rectsize;
   }

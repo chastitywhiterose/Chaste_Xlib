@@ -17,6 +17,7 @@ Window window;
 XEvent event;
 GC gc; /*graphics context*/
 
+#include "xlib_chaste_lib.h"
 #include "xlib_checkerboard.h"
 #include "xlib_polygon.h"
 
@@ -24,13 +25,15 @@ int black,white;
  
 int main(int argc, char **argv)
 {
+ int x;
+
  char *msg = "Hello, World!";
  
  /*open connection to the server*/
- display = XOpenDisplay(NULL);
- if (display == NULL)
+ display=XOpenDisplay(NULL);
+ if(display==NULL)
  {
-  fprintf(stderr, "Cannot open display\n");
+  fprintf(stderr,"Cannot open display\n");
   exit(1);
  }
  
@@ -43,13 +46,6 @@ int main(int argc, char **argv)
  printf("black=%06X\n",black);
  printf("white=%6X\n",white);
 
-/* 
-    XSetForeground(display, gc, BlackPixel(display, s));
-    XSetBackground(display, gc, WhitePixel(display, s));
- */
- 
-
- 
 /*create window of size width*height*/
 window=XCreateSimpleWindow(display,RootWindow(display,screen),0, 0,width,height,0,0,0);
  
@@ -79,7 +75,14 @@ XMapWindow(display,window);
  /*event loop*/
  while(loop)
  {
+  printf("beginning of loop\n");
+ 
   XNextEvent(display,&event);
+  
+  /*XPeekEvent(display,&event);*/
+  
+  printf("after event check\n");
+  
   /*draw or redraw the window*/
   if(event.type==Expose)
   {
@@ -93,15 +96,26 @@ XMapWindow(display,window);
    XSetForeground(display,gc,0xFF00FF);
    xlib_chaste_checker();
    
+   /*draw a single rectangle with official function*/
    XSetForeground(display,gc,0x00FF00);
    XFillRectangle(display,window,gc,200,200,100,100);
    
+   /*draw a single rectangle with my function*/
+   XSetForeground(display,gc,0xFF0000);
+   FillRectangle(800,100,100,100);
+   
+      
    XSetForeground(display,gc,0x000000);
    XDrawString(display,window,gc,50,50,msg,strlen(msg));
    
    XSetForeground(display,gc,0x0000FF);
    xlib_chaste_polygon();
    main_polygon.radians+=PI/180;
+   
+   XSetForeground(display,gc,0xFFFF00);
+   x=100;
+   FillTriangle(x,650,x+100,650,x+50,550);
+
    
     main_check.x_begin=200;
     

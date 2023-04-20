@@ -67,7 +67,7 @@ void chaste_polygon_points()
 void (*poly_points_func)()=chaste_polygon_points;
 
 
-XPoint vertices[3];
+
 
 /*
 Draw a filled polygon using modern OpenGL
@@ -81,29 +81,14 @@ void xlib_chaste_polygon()
  while(i<main_polygon.sides)
  {
   i1=(i+main_polygon.step)%main_polygon.sides;
-  
-  
   vertices[0].x=main_polygon.cx;
   vertices[0].y=main_polygon.cy;
   vertices[1].x=polygon_xpoints[i];
   vertices[1].y=polygon_ypoints[i];
   vertices[2].x=polygon_xpoints[i1];
   vertices[2].y=polygon_ypoints[i1];
-  
-  XFillPolygon(display,window,gc, vertices, 3, Convex, CoordModeOrigin);
-  
-  
-  /*
-  gl_chaste_triangle
-  (
-   main_polygon.cx,main_polygon.cy,
-   polygon_xpoints[i],polygon_ypoints[i],
-   polygon_xpoints[i1],polygon_ypoints[i1]
-  );
-  */
-  
+  XFillPolygon(display,window,gc,vertices,3,Convex,CoordModeOrigin);
   i+=1;
  }
-
 }
 
