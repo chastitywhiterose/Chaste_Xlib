@@ -70,7 +70,7 @@ void (*poly_points_func)()=chaste_polygon_points;
 
 
 /*
-Draw a filled polygon using modern OpenGL
+Draw a filled polygon using xlib
 */
 void xlib_chaste_polygon()
 {
