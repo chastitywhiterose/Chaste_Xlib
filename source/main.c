@@ -113,6 +113,9 @@ XMapWindow(display,window);
    
    XSetForeground(display,gc,0xFF00FF);
    FillCircle(400,100,400,400);
+   
+   XSetForeground(display,gc,0xFFFF00);
+   FillCircle1(main_polygon.cx,main_polygon.cy,main_polygon.radius);
 
   }
   
@@ -150,5 +153,6 @@ XMapWindow(display,window);
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetForeground
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillPolygon
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillArc
 */
 

@@ -39,3 +39,15 @@ void FillCircle(int x,int y,int w,int h)
 
 
 
+
+/*
+draws a filled circle defined by x,y of the center and radius
+*/
+void FillCircle1(int x,int y,int r)
+{
+ /*XFillRectangle(display,window,gc,x,y,w,h);*/
+ XFillArc(display,window,gc,x,y,100,100, 90*64, 360*64);
+}
+
+
+
