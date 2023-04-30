@@ -27,13 +27,13 @@ int bufsize = 20;
 int charcount;
 XComposeStatus compose;
 
-
+#include "xlib_chaste_bitmap.h"
 
 #include "xlib_chaste_lib.h"
 #include "xlib_checkerboard.h"
 #include "xlib_polygon.h"
 
-
+struct chaste_bitmap bitmap; /*possible bitmap I defined that may be used*/
  
 int main(int argc, char **argv)
 {
@@ -80,6 +80,12 @@ XMapWindow(display,window);
  main_polygon.cy=height/2;
  main_polygon.radius=height/3;
  
+ 
+ bitmap=chaste_LoadBMP("./font/FreeBASIC Font 8.bmp");
+ 
+ 
+ 
+ 
  /*event loop*/
  while(loop)
  {
@@ -94,8 +100,15 @@ XMapWindow(display,window);
 
   if(event.type==Expose)
   {
-   XSetForeground(display,gc,0x000000);
+   /*XSetBackground(display,gc,0xF08000);
+   XClearWindow(display,window);*/
+
+   /*XClearArea (display, window, 0, 0, 0, 0, True);*/
+   
+   
+   XSetForeground(display,gc,0xF08000);
    FillRectangle(0,0,width,height);
+   
    
    /*set color of squares that will be drawn for the checkerboard*/
    XSetForeground(display,gc,0xFFFFFF);
@@ -108,14 +121,17 @@ XMapWindow(display,window);
    XSetForeground(display,gc,0x00FF00);
    FillRectangle(400,100,400,400);
    
+   XSetForeground(display,gc,0xFF00FF);
+   FillCircle(400,100,400,400);
+
+   XSetForeground(display,gc,0xFFFF00);
+   FillCircle1(main_polygon.cx,main_polygon.cy,main_polygon.radius);
+   
    XSetForeground(display,gc,0x0000FF);
    xlib_chaste_polygon();
    
-   XSetForeground(display,gc,0xFF00FF);
-   FillCircle(400,100,400,400);
-   
-   XSetForeground(display,gc,0xFFFF00);
-   FillCircle1(main_polygon.cx,main_polygon.cy,main_polygon.radius);
+
+   main_polygon.radians+=PI/180;
 
   }
   
@@ -150,6 +166,7 @@ XMapWindow(display,window);
  Xlib Functions used:
  
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XCreateSimpleWindow
+ https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetBackground
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XSetForeground
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillRectangle
  https://www.x.org/releases/current/doc/libX11/libX11/libX11.html#XFillPolygon

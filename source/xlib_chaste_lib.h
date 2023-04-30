@@ -33,8 +33,7 @@ draws a filled circle defined by bounding rectangle
 */
 void FillCircle(int x,int y,int w,int h)
 {
- /*XFillRectangle(display,window,gc,x,y,w,h);*/
- XFillArc(display,window,gc,x,y,w,h, 90*64, 360*64);
+ XFillArc(display,window,gc,x,y,w,h, 0*64, 360*64);
 }
 
 
@@ -42,11 +41,12 @@ void FillCircle(int x,int y,int w,int h)
 
 /*
 draws a filled circle defined by x,y of the center and radius
+this is meant for making a circle that a regular polygon fits
+into perfectly if the same location and radius is passed
 */
 void FillCircle1(int x,int y,int r)
 {
- /*XFillRectangle(display,window,gc,x,y,w,h);*/
- XFillArc(display,window,gc,x,y,100,100, 90*64, 360*64);
+ XFillArc(display,window,gc,x-r,y-r,r*2,r*2, 0*64, 360*64);
 }
 
 
