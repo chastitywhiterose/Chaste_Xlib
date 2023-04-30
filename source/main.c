@@ -83,8 +83,8 @@ XMapWindow(display,window);
  
  bitmap=chaste_LoadBMP("./font/FreeBASIC Font 8.bmp");
  
- 
- 
+ font_8=chaste_font_load("./font/FreeBASIC Font 8.bmp");
+ main_font=font_8;
  
  /*event loop*/
  while(loop)
@@ -134,6 +134,8 @@ XMapWindow(display,window);
    
    XSetForeground(display,gc,0x000000);
    DrawBitmap(bitmap);
+   
+   chaste_font_draw_string_scaled("Chastity",50,580,16);
 
   }
   
