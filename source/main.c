@@ -27,9 +27,9 @@ int bufsize = 20;
 int charcount;
 XComposeStatus compose;
 
-#include "xlib_chaste_bitmap.h"
-
 #include "xlib_chaste_lib.h"
+#include "xlib_chaste_bitmap.h"
+#include "xlib_chaste_bitmap_font.h"
 #include "xlib_checkerboard.h"
 #include "xlib_polygon.h"
 
@@ -130,8 +130,10 @@ XMapWindow(display,window);
    XSetForeground(display,gc,0x0000FF);
    xlib_chaste_polygon();
    
-
    main_polygon.radians+=PI/180;
+   
+   XSetForeground(display,gc,0x000000);
+   DrawBitmap(bitmap);
 
   }
   

@@ -28,6 +28,11 @@ void FillRectangle(int x,int y,int w,int h)
  XFillRectangle(display,window,gc,x,y,w,h);
 }
 
+void DrawPoint(int x,int y)
+{
+ XDrawPoint(display,window,gc,x,y);
+}
+
 /*
 draws a filled circle defined by bounding rectangle
 */

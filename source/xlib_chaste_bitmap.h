@@ -1,6 +1,9 @@
 /*xlib_chaste_bitmap.h*/
 
-/*this header file is meant to allow loading bitmap files into a way that can be used in xlib*/
+/*
+ this header file is meant to allow loading bitmap files into a way that can be used in Xlib
+ However, nothing specific to Xlib is in this file. These functions are but a tiny selection of my massive Binary Bit Map library from years ago which used nothing but the C standard library.
+*/
 
 /*
 include this header file to allow fixed width integer types in C
@@ -314,7 +317,6 @@ struct chaste_bitmap
 
 struct chaste_bitmap chaste_LoadBMP(const char *filename)
 {
- int x,y;
  struct chaste_bitmap new_bitmap;
  
  /*attempt to allocate memory ahead of time big enough for entire window*/
@@ -325,21 +327,51 @@ struct chaste_bitmap chaste_LoadBMP(const char *filename)
  
  printf("end of load file %s\n",filename);
 
+ 
+ return new_bitmap;
+}
+
+void TestBitmap(struct chaste_bitmap bitmap)
+{
+ int x,y;
  /*checking the validity of pixels*/
+ 
  y=0;
- while(y<new_bitmap.h)
+ while(y<bitmap.h)
  {
   x=0;
-  while(x<new_bitmap.w)
+  while(x<bitmap.w)
   {
-   printf("%d,%d = %X\n",x,y,new_bitmap.pixels[x+y*new_bitmap.w]);
+   printf("%d,%d = %X\n",x,y,bitmap.pixels[x+y*bitmap.w]);
    x++;
   }
   y++;
  }
  
- return new_bitmap;
+
 }
 
-
-
+void DrawBitmap(struct chaste_bitmap bitmap)
+{
+ int x,y,pixel;
+ /*checking the validity of pixels*/
+ 
+ y=0;
+ while(y<bitmap.h)
+ {
+  x=0;
+  while(x<bitmap.w)
+  {
+   pixel=bitmap.pixels[x+y*bitmap.w];
+   /*printf("%d,%d = %X\n",x,y,bitmap.pixels[x+y*bitmap.w]);*/
+   if(pixel!=0)
+   {
+    DrawPoint(x,y);
+    /*FillRectangle(x,y,1,1);*/
+   }
+   x++;
+  }
+  y++;
+ }
+ 
+}
